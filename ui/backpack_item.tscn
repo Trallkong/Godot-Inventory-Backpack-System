@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://bhwljt1utyn6o"]
+
+[ext_resource type="Texture2D" uid="uid://cxkp4qrahxjt7" path="res://images/item_icons/stick.png" id="1_3miu2"]
+[ext_resource type="Script" uid="uid://m6fdlnpfgci7" path="res://ui/backpack_item.gd" id="1_4o46u"]
+
+[node name="BackpackItem" type="Button" unique_id=891771295]
+custom_minimum_size = Vector2(128, 128)
+button_mask = 3
+script = ExtResource("1_4o46u")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2093808216]
+layout_mode = 0
+offset_right = 128.0
+offset_bottom = 128.0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer" unique_id=1141537178]
+layout_mode = 2
+texture = ExtResource("1_3miu2")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="." unique_id=727002162]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 102.0
+offset_right = 124.0
+offset_bottom = 125.0
+text = "999"
+horizontal_alignment = 2

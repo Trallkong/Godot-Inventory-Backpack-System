@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://ojpjn86lbmmg"]
+
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="1_tlwt5"]
+[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="2_aqk2v"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="3_036b0"]
+[ext_resource type="PackedScene" uid="uid://cfsjo4fh0w2sc" path="res://player.tscn" id="4_aqk2v"]
+[ext_resource type="Script" uid="uid://c4wrj5twn3r07" path="res://gameplay/camera/camera_controller.gd" id="5_036b0"]
+[ext_resource type="PackedScene" uid="uid://chudonx6r2oek" path="res://ui/backpack_ui.tscn" id="6_dwbse"]
+[ext_resource type="Script" uid="uid://cbg1u4se345cs" path="res://gameplay/backpack/backpack.gd" id="7_pkg7o"]
+[ext_resource type="PackedScene" uid="uid://cftrua2ljj07y" path="res://gameplay/drop_item/drop_item.tscn" id="8_gbfbk"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tlwt5"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_aqk2v"]
+sky_material = SubResource("ProceduralSkyMaterial_tlwt5")
+
+[sub_resource type="Environment" id="Environment_036b0"]
+background_mode = 2
+sky = SubResource("Sky_aqk2v")
+glow_enabled = true
+
+[sub_resource type="Resource" id="Resource_dwbse"]
+script = ExtResource("3_036b0")
+
+[sub_resource type="BoxMesh" id="BoxMesh_wpm6n"]
+size = Vector3(10, 0.2, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wpm6n"]
+size = Vector3(10, 0.2, 10)
+
+[node name="World" type="Node3D" unique_id=953324941]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1586862268]
+environment = SubResource("Environment_036b0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=441756406]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1947574543]
+physics_interpolation_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7691064, 1)
+top_level = true
+
+[node name="PhantomCameraHost" type="Node" parent="Camera3D" unique_id=1566194512]
+process_priority = 300
+process_physics_priority = 300
+script = ExtResource("1_tlwt5")
+
+[node name="PhantomCamera3D" type="Node3D" parent="." unique_id=296795898 node_paths=PackedStringArray("follow_target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7691064, 1)
+script = ExtResource("2_aqk2v")
+follow_mode = 6
+follow_target = NodePath("../Player")
+tween_resource = SubResource("Resource_dwbse")
+follow_offset = Vector3(0, 1.57, 0)
+align_transform_with_view = Callable()
+align_position_with_view = Callable()
+align_rotation_with_view = Callable()
+
+[node name="Platform" type="Node3D" parent="." unique_id=412187070]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Platform" unique_id=959952970]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Platform/StaticBody3D" unique_id=638619263]
+mesh = SubResource("BoxMesh_wpm6n")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platform/StaticBody3D" unique_id=1103504142]
+shape = SubResource("BoxShape3D_wpm6n")
+
+[node name="Player" parent="." unique_id=1948335909 node_paths=PackedStringArray("camera_controller") instance=ExtResource("4_aqk2v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19910634, 0)
+camera_controller = NodePath("../CameraController")
+
+[node name="CameraController" type="Node" parent="." unique_id=1732304284 node_paths=PackedStringArray("camera")]
+script = ExtResource("5_036b0")
+camera = NodePath("../PhantomCamera3D")
+metadata/_custom_type_script = "uid://c4wrj5twn3r07"
+
+[node name="BackpackUi" parent="." unique_id=1194858011 instance=ExtResource("6_dwbse")]
+visible = false
+
+[node name="Backpack" type="Node" parent="." unique_id=1697380049 node_paths=PackedStringArray("ui")]
+script = ExtResource("7_pkg7o")
+ui = NodePath("../BackpackUi")
+metadata/_custom_type_script = "uid://cbg1u4se345cs"
+
+[node name="DropItem" parent="." unique_id=1797709771 instance=ExtResource("8_gbfbk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9935795, -1.2290292)
+visible = true
+
+[node name="DropItem2" parent="." unique_id=1912040363 instance=ExtResource("8_gbfbk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6735916, 0.9935795, -1.2290292)
+visible = true

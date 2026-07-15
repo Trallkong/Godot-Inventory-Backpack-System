@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://b0h8a6n6otj16"]
+
+[ext_resource type="Script" uid="uid://c6px6l7w8vudb" path="res://ui/backpack_item_menu.gd" id="1_6ril1"]
+
+[node name="BackpackItemMenu" type="Control" unique_id=688600304]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_6ril1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1294530339]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 0
+
+[node name="Drop" type="Button" parent="VBoxContainer" unique_id=1909082648]
+layout_mode = 2
+text = "丢弃"
+
+[node name="Use" type="Button" parent="VBoxContainer" unique_id=263765802]
+layout_mode = 2
+text = "使用"
+
+[node name="Check" type="Button" parent="VBoxContainer" unique_id=213191561]
+layout_mode = 2
+text = "检查"
+
+[connection signal="pressed" from="VBoxContainer/Drop" to="." method="_on_drop_pressed"]
+[connection signal="pressed" from="VBoxContainer/Use" to="." method="_on_use_pressed"]
+[connection signal="pressed" from="VBoxContainer/Check" to="." method="_on_check_pressed"]
