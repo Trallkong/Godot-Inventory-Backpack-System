@@ -7,18 +7,17 @@
 	"0002" : {
 		"name" : "木剑",
 		"icon" : "res://images/item_icons/wood_sword.png",
-		"type" : "tool"
+		"type" : "weapon"
 	},
 	"0003" : {
 		"name" : "铁剑",
 		"icon" : "res://images/item_icons/iron_sword.png",
-		"type" : "tool"
+		"type" : "weapon"
 	},
 	"0004" : {
 		"name" : "草药",
 		"icon" : "res://images/item_icons/herbs.png",
 		"type" : "consumables",
-		"method" : "heal_player",
 		"power" : 30
 	}
 }

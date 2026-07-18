@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b0h8a6n6otj16" path="res://ui/backpack_item_menu.tscn" id="1_u0fh4"]
 
 [node name="MenuLayer" type="CanvasLayer" unique_id=1033130592 node_paths=PackedStringArray("backpack_item_menu")]
+process_mode = 3
 layer = 5
 script = ExtResource("1_84g5n")
 backpack_item_menu = NodePath("BackpackItemMenu")

@@ -13,6 +13,8 @@ class_name BackpackItem extends Button
 @onready var label: Label = $Label
 @onready var texture_rect: TextureRect = $MarginContainer/TextureRect
 
+var index: int = -1
+
 func _ready() -> void:
 	_update_icon()
 	_update_label()
@@ -24,13 +26,8 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			var t_pos = global_position + event.position
-			MenuLayer.backpack_item_menu.position = t_pos
-			MenuLayer.backpack_item_menu.show()
-			
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if MenuLayer.backpack_item_menu.visible:
-			MenuLayer.backpack_item_menu.hide()
+			MenuLayer.backpack_item_menu.set_selected_position(index)
+			MenuLayer.backpack_item_menu.show_menu_at_position(t_pos)
 	
 func _update_label() -> void:
 	if label and amount > 0:
@@ -46,3 +43,7 @@ func _update_icon() ->void:
 		
 func has_item() -> bool:
 	return item_icon_path and item_icon_path != ""
+	
+func clear() -> void:
+	item_icon_path = ""
+	amount = 0

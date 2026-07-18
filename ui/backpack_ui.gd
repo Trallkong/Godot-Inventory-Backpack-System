@@ -11,6 +11,7 @@ var grids: Array[BackpackItem] = []
 func _ready() -> void:
 	for i in range(capacity):
 		var n = BTN_SCENE.instantiate() as BackpackItem
+		n.index = i
 		grids.push_back(n)
 		grid_container.add_child(n)
 
@@ -28,12 +29,12 @@ func _physics_process(_delta: float) -> void:
 			
 func refresh(inventory_data: Dictionary) -> void:
 	for i in grids.size():
-		var grid_num_str = str(i)
-		if inventory_data.has(grid_num_str):
+		var position = str(i)
+		if inventory_data.has(position):
 			var grid := grids[i]
-			var item = inventory_data[grid_num_str]
+			var data = inventory_data[position]
 			
-			var info = ItemTemplates.get_template_info_by_id(item["id"])
+			var info = ItemTemplates.get_template_info_by_id(data["id"])
 			grid.item_icon_path = info["icon"]
 			
 			var type = info["type"]
@@ -41,5 +42,6 @@ func refresh(inventory_data: Dictionary) -> void:
 				grid.amount = 0
 				# 设置耐久度
 			else:
-				grid.amount = item["amount"]
-		
+				grid.amount = data["amount"]
+		else:
+			grids[i].clear()
