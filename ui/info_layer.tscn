@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://boe6caekqcl13"]
+
+[ext_resource type="Script" uid="uid://dys8axs3mquvj" path="res://ui/info_layer.gd" id="1_jkbnx"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jkbnx"]
+font_size = 36
+
+[node name="InfoLayer" type="CanvasLayer" unique_id=986625415]
+process_mode = 3
+script = ExtResource("1_jkbnx")
+
+[node name="Timer" type="Timer" parent="." unique_id=1596973475]
+
+[node name="SafeZone" type="Control" parent="." unique_id=1134526219]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SafeZone" unique_id=485297043]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+theme_override_constants/margin_top = 600
+
+[node name="CenterContainer" type="CenterContainer" parent="SafeZone/MarginContainer" unique_id=149134156]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="SafeZone/MarginContainer/CenterContainer" unique_id=991929716]
+layout_mode = 2
+offset_transform_enabled = true
+text = "这是一条示例消息"
+label_settings = SubResource("LabelSettings_jkbnx")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

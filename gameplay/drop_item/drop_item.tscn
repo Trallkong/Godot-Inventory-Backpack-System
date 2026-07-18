@@ -1,27 +1,16 @@
 [gd_scene format=3 uid="uid://cftrua2ljj07y"]
 
 [ext_resource type="Script" uid="uid://cf10ln5xok000" path="res://gameplay/drop_item/drop_item.gd" id="1_uni4l"]
-[ext_resource type="Texture2D" uid="uid://di156com85tjf" path="res://images/item_icons/herbs.png" id="2_bmnoe"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_uni4l"]
 radius = 0.21382175
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g2rva"]
-transparency = 1
-shading_mode = 0
-albedo_texture = ExtResource("2_bmnoe")
-billboard_mode = 1
-
-[sub_resource type="QuadMesh" id="QuadMesh_wpm6n"]
-material = SubResource("StandardMaterial3D_g2rva")
+[sub_resource type="QuadMesh" id="QuadMesh_uni4l"]
 size = Vector2(0.5, 0.5)
 
 [node name="DropItem" type="RigidBody3D" unique_id=1912040363]
-visible = false
 collision_layer = 2
 script = ExtResource("1_uni4l")
-item_id = "0004"
-amount = 10
 metadata/_custom_type_script = "uid://cf10ln5xok000"
 
 [node name="Label3D" type="Label3D" parent="." unique_id=1024941979]
@@ -34,4 +23,4 @@ text = "F"
 shape = SubResource("SphereShape3D_uni4l")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1330848680]
-mesh = SubResource("QuadMesh_wpm6n")
+mesh = SubResource("QuadMesh_uni4l")

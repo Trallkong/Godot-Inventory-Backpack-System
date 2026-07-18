@@ -8,10 +8,11 @@
 radius = 0.3642578
 height = 1.7844238
 
-[node name="Player" type="CharacterBody3D" unique_id=1948335909 node_paths=PackedStringArray("skin")]
+[node name="Player" type="CharacterBody3D" unique_id=1948335909 node_paths=PackedStringArray("skin", "item_detector")]
 collision_layer = 4
 script = ExtResource("1_onrkg")
 skin = NodePath("CharacterSkin")
+item_detector = NodePath("ItemDetector")
 metadata/_custom_type_script = "uid://ybu5kwodcv0w"
 
 [node name="CharacterSkin" parent="." unique_id=1782522632 instance=ExtResource("1_4flbx")]

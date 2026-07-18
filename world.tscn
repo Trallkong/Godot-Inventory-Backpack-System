@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://chudonx6r2oek" path="res://ui/backpack_ui.tscn" id="6_dwbse"]
 [ext_resource type="Script" uid="uid://cbg1u4se345cs" path="res://gameplay/backpack/backpack.gd" id="7_pkg7o"]
 [ext_resource type="PackedScene" uid="uid://cftrua2ljj07y" path="res://gameplay/drop_item/drop_item.tscn" id="8_gbfbk"]
+[ext_resource type="PackedScene" uid="uid://boe6caekqcl13" path="res://ui/info_layer.tscn" id="9_ioo17"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tlwt5"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -72,25 +73,36 @@ shape = SubResource("BoxShape3D_wpm6n")
 
 [node name="Player" parent="." unique_id=1948335909 node_paths=PackedStringArray("camera_controller") instance=ExtResource("4_aqk2v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19910634, 0)
-camera_controller = NodePath("../CameraController")
+camera_controller = NodePath("../Controllers/CameraController")
 
-[node name="CameraController" type="Node" parent="." unique_id=1732304284 node_paths=PackedStringArray("camera")]
-script = ExtResource("5_036b0")
-camera = NodePath("../PhantomCamera3D")
-metadata/_custom_type_script = "uid://c4wrj5twn3r07"
+[node name="UI" type="Node" parent="." unique_id=41046372]
 
-[node name="BackpackUi" parent="." unique_id=1194858011 instance=ExtResource("6_dwbse")]
+[node name="BackpackUi" parent="UI" unique_id=1194858011 instance=ExtResource("6_dwbse")]
 visible = false
 
-[node name="Backpack" type="Node" parent="." unique_id=1697380049 node_paths=PackedStringArray("ui")]
+[node name="InfoLayer" parent="UI" unique_id=986625415 instance=ExtResource("9_ioo17")]
+
+[node name="Controllers" type="Node" parent="." unique_id=2125389350]
+
+[node name="CameraController" type="Node" parent="Controllers" unique_id=1732304284 node_paths=PackedStringArray("camera")]
+script = ExtResource("5_036b0")
+camera = NodePath("../../PhantomCamera3D")
+metadata/_custom_type_script = "uid://c4wrj5twn3r07"
+
+[node name="Backpack" type="Node" parent="Controllers" unique_id=1697380049 node_paths=PackedStringArray("player", "ui", "info_layer")]
 script = ExtResource("7_pkg7o")
-ui = NodePath("../BackpackUi")
+player = NodePath("../../Player")
+ui = NodePath("../../UI/BackpackUi")
+info_layer = NodePath("../../UI/InfoLayer")
 metadata/_custom_type_script = "uid://cbg1u4se345cs"
 
-[node name="DropItem" parent="." unique_id=1797709771 instance=ExtResource("8_gbfbk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9935795, -1.2290292)
-visible = true
+[node name="DropItem" parent="." unique_id=1912040363 instance=ExtResource("8_gbfbk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.76922905, -2.0442007)
+item_id = "0001"
+amount = 20
+icon_path = "res://images/item_icons/stick.png"
 
-[node name="DropItem2" parent="." unique_id=1912040363 instance=ExtResource("8_gbfbk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6735916, 0.9935795, -1.2290292)
-visible = true
+[node name="DropItem2" parent="." unique_id=1770254965 instance=ExtResource("8_gbfbk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7713623, 0.6917642, -2.2388778)
+item_id = "0002"
+icon_path = "res://images/item_icons/wood_sword.png"

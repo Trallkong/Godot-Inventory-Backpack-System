@@ -13,6 +13,7 @@ config_version=5
 config/name="Backpack"
 run/main_scene="uid://ojpjn86lbmmg"
 config/features=PackedStringArray("4.7", "Forward Plus")
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [autoload]
@@ -20,6 +21,7 @@ config/icon="res://icon.svg"
 PhantomCameraManager="*uid://duq6jhf6unyis"
 ItemTemplates="*uid://ba2dopkpbxgkk"
 MenuLayer="*uid://dhl7upk8kbicy"
+GlobalVariable="*uid://ca27x5ujhmbeu"
 
 [display]
 

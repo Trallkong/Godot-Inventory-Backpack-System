@@ -4,6 +4,10 @@ class_name Player extends CharacterBody3D
 @export var walk_speed: float = 3.0
 @export var jump_force: float = 8.0
 @export var camera_controller: CameraController
+@export var item_detector: ItemDetector
+
+func _ready() -> void:
+	GlobalVariable.current_player = self
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
