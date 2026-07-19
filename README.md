@@ -12,7 +12,8 @@
   - `weapon` — 武器，不可堆叠
   - `consumables` — 消耗品，可堆叠，支持使用效果
 - **物品实体系统**：每种物品对应实体子类，支持多态 use/drop/check 行为
-- **背包 UI**：网格布局，打开时暂停场景，物品右键菜单交互
+- **背包 UI**：网格布局，打开时暂停场景，支持拖拽交换物品位置、右键菜单交互
+- **右键菜单**：点击按钮自动关闭，点击菜单外部自动隐藏
 - **InfoLayer**：拾取通知动画
 - **物品掉落与拾取**：场景中可放置 3D 掉落物，靠近后按 F 拾取
 - **3D 角色控制**：WASD 移动、跳跃、第三人称视角
@@ -65,9 +66,17 @@
 
 ```
 DropItem → ItemDetector → BackpackController → BackpackService → BackpackRepository → inventory_save.json
-                                                                                      ↘ BackpackUI (refresh)
-                              InfoLayer (通知)
+                            ↓                                                         ↘ BackpackUI (refresh)
+                         InfoLayer (通知)        ← BackpackItem (拖拽交换位置)
+                                                  ↕
+                                          BackpackItemMenu (右键菜单)
 ```
+
+## 提供的功能
+
+- **拖拽交换**：在背包格子间拖拽物品交换位置（`_get_drag_data` / `_can_drop_data` / `_drop_data`）
+- **右键菜单**：右键物品弹出菜单（丢弃/使用/检查），点击按钮或点击菜单外部自动关闭
+- **右键菜单自动隐藏**：通过 `_input` + `call_deferred(&"hide")` 实现，避免与 `_gui_input` 事件处理冲突
 
 ## Autoloads
 

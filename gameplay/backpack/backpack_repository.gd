@@ -7,6 +7,7 @@ var inventory_data: Dictionary = {}
 
 func _ready() -> void:
 	load_inventory()
+	GlobalVariable.backpack_repository = self
 	
 	await ui.ready
 	ui.refresh(inventory_data)
@@ -96,3 +97,20 @@ func get_item_entity_by_position(position: int) -> ItemEntityBase:
 	var data = inventory_data[str(position)]
 	var id = data["id"]
 	return EntityHelper.create_entity(id)
+	
+## 交换两个格子的信息
+func swap_items(from: int, to: int) -> void:
+	if not inventory_data.has(str(from)) or from == to:
+		return
+		
+	if inventory_data.has(str(to)):
+		var a = inventory_data[str(from)]
+		var b = inventory_data[str(to)]
+		inventory_data[str(from)] = b
+		inventory_data[str(to)] = a
+	else:
+		var a = inventory_data[str(from)]
+		inventory_data.erase(str(from))
+		inventory_data[str(to)] = a
+		
+	sync()

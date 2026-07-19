@@ -47,3 +47,23 @@ func has_item() -> bool:
 func clear() -> void:
 	item_icon_path = ""
 	amount = 0
+
+# 拖起：返回被拖物品信息
+func _get_drag_data(_at_position: Vector2) -> Variant:
+	if not has_item():
+		return null
+	var preview = TextureRect.new()
+	preview.texture = texture_rect.texture
+	preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	preview.size = Vector2(64, 64)
+	set_drag_preview(preview)
+	return { "from_index" : index }
+
+# 放下前：允许放下	
+func _can_drop_data(_at_position: Vector2, _data: Variant) -> bool:
+	return true
+
+# 放下时：执行交换/移动
+func _drop_data(_at_position: Vector2, data: Variant) -> void:
+	var from = data["from_index"] as int
+	GlobalVariable.backpack_repository.swap_items(from, index)
