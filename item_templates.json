@@ -7,17 +7,27 @@
 	"0002" : {
 		"name" : "木剑",
 		"icon" : "res://images/item_icons/wood_sword.png",
-		"type" : "weapon"
+		"type" : "weapon",
+		"properties" : {
+			"durability": 200,
+			"damage" : 20
+		}
 	},
 	"0003" : {
 		"name" : "铁剑",
 		"icon" : "res://images/item_icons/iron_sword.png",
-		"type" : "weapon"
+		"type" : "weapon",
+		"properties" : {
+			"durability": 500,
+			"damage" : 50
+		}
 	},
 	"0004" : {
 		"name" : "草药",
 		"icon" : "res://images/item_icons/herbs.png",
-		"type" : "consumables",
-		"power" : 30
+		"type" : "medicine",
+		"properties" : {
+			"power" : 30
+		}
 	}
 }

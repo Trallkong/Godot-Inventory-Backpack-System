@@ -5,18 +5,20 @@
 ## 功能
 
 - **背包系统**：支持物品拾取、堆叠、存储，数据自动持久化到 JSON 文件
-- **物品模板**：通过 JSON 配置物品属性（名称、图标、类型），易于扩展
+- **物品模板**：通过 JSON 配置物品属性（名称、图标、类型、专有属性），易于扩展
 - **物品类型**：
   - `material` — 材料，可堆叠
   - `tool` — 工具，支持耐久度
   - `weapon` — 武器，不可堆叠
-  - `consumables` — 消耗品，可堆叠，支持使用效果
-- **物品实体系统**：每种物品对应实体子类，支持多态 use/drop/check 行为
+  - `medicine` — 药品，可堆叠，支持使用效果
+- **物品实体系统**：按类型匹配实体类（`{type}_entity.gd`），特例优先匹配（`{name}_entity.gd`），纯数据物品兜底用基类
+- **属性系统**：专有属性统一存 `properties` 字典，不强制为每个物品建独立类
 - **背包 UI**：网格布局，打开时暂停场景，支持拖拽交换物品位置、右键菜单交互
 - **右键菜单**：点击按钮自动关闭，点击菜单外部自动隐藏
 - **InfoLayer**：拾取通知动画
 - **物品掉落与拾取**：场景中可放置 3D 掉落物，靠近后按 F 拾取
 - **3D 角色控制**：WASD 移动、跳跃、第三人称视角
+- **材质缓存**：掉落物材质按图标路径静态缓存，同图标不重复创建
 
 ## 操作
 
@@ -32,51 +34,51 @@
 
 ```
 ├── gameplay/
-│   ├── backpack/             # 背包（Controller → Service → Repository）
+│   ├── backpack/                # 背包（Controller → Service → Repository）
 │   │   ├── backpack_controller  # 输入/信号编排
 │   │   ├── backpack_service     # 业务逻辑
-│   │   ├── backpack_repository  # 数据持久化
+│   │   ├── backpack_repository  # 数据持久化 + 反向索引
+│   │   ├── item_templates       # 物品模板读取（Autoload）
 │   │   └── entity/              # 物品实体体系
-│   │       ├── item_entity_base # 实体基类（MATERIAL/TOOL/WEAPON/CONSUMABLES）
-│   │       ├── entity_helper    # 工厂方法
-│   │       ├── wood_stick_entity
-│   │       ├── wood_sword_entity
-│   │       ├── iron_sword_entity
-│   │       └── herb_entity
-│   ├── camera/               # 相机控制（PhantomCamera3D）
-│   ├── drop_item/            # 掉落物场景 RigidBody3D
-│   ├── item_detector/        # 物品检测 RayCast3D
-│   └── global_variable/      # 全局变量（Autoload）
+│   │       ├── item_entity_base # 实体基类 + properties 字典
+│   │       ├── entity_helper    # 工厂 + 缓存 + 命名惯例实例化
+│   │       ├── material_entity  # 材料类型共用类
+│   │       ├── weapon_entity    # 武器类型共用类
+│   │       └── medicine_entity  # 药品类型共用类
+│   ├── camera/                  # 相机控制（PhantomCamera3D）
+│   ├── drop_item/               # 掉落物 RigidBody3D + 材质缓存
+│   ├── item_detector/           # 物品检测 RayCast3D
+│   └── global_variable/         # 全局变量（Autoload，仅 current_player）
 ├── ui/
-│   ├── backpack_ui           # 背包界面（CanvasLayer, layer=2）
-│   ├── backpack_item         # 物品格子（Button）
-│   ├── backpack_item_menu    # 右键菜单
-│   ├── info_layer            # 拾取通知动画
-│   └── menu_layer            # 菜单层 Autoload（layer=5, process_mode=WHEN_PAUSED）
-├── images/item_icons/        # 物品图标
-├── models/                   # 3D 模型
-├── item_templates.json       # 物品模板配置
-├── inventory_save.json       # 背包存档（自动生成）
-├── player.gd                 # 玩家控制
-├── character_skin.gd         # 角色外观/动画
-└── world.tscn                # 主场景
+│   ├── backpack_ui              # 背包界面（CanvasLayer, layer=2）
+│   ├── backpack_item            # 物品格子（Button，信号解耦）
+│   ├── backpack_item_menu       # 右键菜单
+│   ├── info_layer               # 拾取通知动画
+│   └── menu_layer               # 菜单层 Autoload（layer=5, process_mode=WHEN_PAUSED）
+├── images/item_icons/           # 物品图标
+├── models/                      # 3D 模型
+├── item_templates.json          # 物品模板配置
+├── inventory_save.json          # 背包存档（自动生成）
+├── player.gd                    # 玩家控制
+├── character_skin.gd            # 角色外观/动画
+└── world.tscn                   # 主场景
 ```
 
-## 架构
+## 数据流
 
 ```
 DropItem → ItemDetector → BackpackController → BackpackService → BackpackRepository → inventory_save.json
-                            ↓                                                         ↘ BackpackUI (refresh)
-                         InfoLayer (通知)        ← BackpackItem (拖拽交换位置)
-                                                  ↕
-                                          BackpackItemMenu (右键菜单)
+                             ↓                ↗                                             ↘ BackpackUI (refresh)
+                          InfoLayer         BackpackUI.item_swap_requested (信号)
+                                             ↖ BackpackItem.swap_requested (信号)
+                                                   ↕
+                                           BackpackItemMenu (右键菜单)
 ```
 
-## 提供的功能
-
-- **拖拽交换**：在背包格子间拖拽物品交换位置（`_get_drag_data` / `_can_drop_data` / `_drop_data`）
-- **右键菜单**：右键物品弹出菜单（丢弃/使用/检查），点击按钮或点击菜单外部自动关闭
-- **右键菜单自动隐藏**：通过 `_input` + `call_deferred(&"hide")` 实现，避免与 `_gui_input` 事件处理冲突
+物品实体实例化策略（`EntityHelper.create_entity`）：
+1. 精确匹配 `{name}_entity.gd`（如草药 → 无特例类，跳过）
+2. 类型匹配 `{type}_entity.gd`（草药 → `medicine_entity.gd`）
+3. 兜底 `ItemEntityBase.new()`
 
 ## Autoloads
 
@@ -85,7 +87,7 @@ DropItem → ItemDetector → BackpackController → BackpackService → Backpac
 | `PhantomCameraManager` | Phantom Camera 插件 v0.11 |
 | `ItemTemplates` | 读取 `item_templates.json` |
 | `MenuLayer` | 全局右键菜单入口，layer=5 |
-| `GlobalVariable` | 全局共享状态（current_player 等） |
+| `GlobalVariable` | 全局共享状态（仅 current_player） |
 
 ## 插件
 

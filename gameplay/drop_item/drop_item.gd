@@ -11,18 +11,23 @@ class_name DropItem extends RigidBody3D
 @onready var label_3d: Label3D = $Label3D
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 
-var material: StandardMaterial3D
+static var _material_cache: Dictionary = {}
 
 func _ready() -> void:
 	label_3d.hide()
 	
-	# 换上IconPath所指向的图片，并默认开启Billboard显示
-	material = StandardMaterial3D.new()
-	material.albedo_texture = load(icon_path)
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
-	mesh.set_surface_override_material(0, material)
+	if icon_path.is_empty():
+		return
+	
+	if not _material_cache.has(icon_path):
+		var mat := StandardMaterial3D.new()
+		mat.albedo_texture = load(icon_path)
+		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+		_material_cache[icon_path] = mat
+	
+	mesh.set_surface_override_material(0, _material_cache[icon_path])
 
 ## 开启UI提示
 func show_hint() -> void:
