@@ -14,6 +14,28 @@ func _ready() -> void:
 			push_error("打开物品模板(", ITEM_TEMPLATES_PATH,")失败")
 	else:
 		push_error("物品模板(", ITEM_TEMPLATES_PATH,")不存在，你需要先创建一份")
+	
+	_register_entities()
+
+func _register_entities() -> void:
+	EntityHelper.register("0001", _create_wood_stick)
+	EntityHelper.register("0002", _create_wood_sword)
+	EntityHelper.register("0003", _create_iron_sword)
+	EntityHelper.register("0004", _create_herb)
+
+static func _create_wood_stick(_data: Dictionary) -> ItemEntityBase:
+	return WoodStickEntity.new()
+
+static func _create_wood_sword(_data: Dictionary) -> ItemEntityBase:
+	return WoodSwordEntity.new()
+
+static func _create_iron_sword(_data: Dictionary) -> ItemEntityBase:
+	return IronSwordEntity.new()
+
+static func _create_herb(data: Dictionary) -> ItemEntityBase:
+	var e := HerbEntity.new()
+	e.power = data.get("power", 0.0)
+	return e
 
 func get_template_info_by_id(id: String) -> Dictionary:
 	if data.has(id):

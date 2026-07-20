@@ -7,6 +7,8 @@ class_name BackpackItem extends Button
 		
 @export var item_icon_path: String:
 	set(value):
+		if item_icon_path == value:
+			return
 		item_icon_path = value
 		_update_icon()
 
@@ -63,7 +65,9 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 func _can_drop_data(_at_position: Vector2, _data: Variant) -> bool:
 	return true
 
+signal swap_requested(from: int, to: int)
+
 # 放下时：执行交换/移动
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	var from = data["from_index"] as int
-	GlobalVariable.backpack_repository.swap_items(from, index)
+	swap_requested.emit(from, index)

@@ -1,5 +1,10 @@
 class_name EntityHelper extends Node
 
+static var _registry: Dictionary = {}
+
+static func register(id: String, factory: Callable) -> void:
+	_registry[id] = factory
+
 static func get_type(type_str: String) -> ItemEntityBase.EntityType:
 	match type_str:
 		"material":
@@ -23,29 +28,15 @@ static func is_accumulatable(item: ItemEntityBase) -> bool:
 
 static func create_entity(id: String) -> ItemEntityBase:
 	var data = ItemTemplates.get_template_info_by_id(id)
-	match id:
-		"0001":
-			var e := WoodStickEntity.new()
-			_load_entity_common(e, id, data)
-			return e
-		"0002":
-			var e := WoodSwordEntity.new()
-			_load_entity_common(e, id, data)
-			return e
-		"0003":
-			var e := IronSwordEntity.new()
-			_load_entity_common(e, id, data)
-			return e
-		"0004":
-			var e := HerbEntity.new()
-			_load_entity_common(e, id, data)
-			e.power = data["power"]
-			return e
-	return null
+	if not _registry.has(id):
+		push_error("未知物品 ID: ", id)
+		return null
+	var e = _registry[id].call(data)
+	_load_entity_common(e, id, data)
+	return e
 
 static func _load_entity_common(e: ItemEntityBase, id: String, data: Dictionary) -> void:
 	e.entity_id = id
 	e.entity_type = EntityHelper.get_type(data["type"])
 	e.entity_icon_path = data["icon"]
 	e.entity_name = data["name"]
-			

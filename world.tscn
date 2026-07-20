@@ -89,9 +89,10 @@ script = ExtResource("10_wse8f")
 repository = NodePath("../BackpackRepository")
 metadata/_custom_type_script = "uid://bc100pk4bqxlo"
 
-[node name="BackpackController" type="Node" parent="BackpackSystem" unique_id=196899204 node_paths=PackedStringArray("service", "player", "info_layer")]
+[node name="BackpackController" type="Node" parent="BackpackSystem" unique_id=196899204 node_paths=PackedStringArray("service", "ui", "player", "info_layer")]
 script = ExtResource("11_ic0uy")
 service = NodePath("../BackpackService")
+ui = NodePath("../../UI/BackpackUi")
 player = NodePath("../../Player")
 info_layer = NodePath("../../UI/InfoLayer")
 metadata/_custom_type_script = "uid://selj4vksumq1"

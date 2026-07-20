@@ -11,7 +11,6 @@ var tween: Tween
 
 func _ready() -> void:
 	timer.wait_time = info_display_time
-	GlobalVariable.info_layer = self
 	label.text = ""
 
 func _process(_delta: float) -> void:

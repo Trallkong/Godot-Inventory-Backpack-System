@@ -16,6 +16,11 @@ func add_items(item: ItemEntityBase, amount: int) -> void:
 	
 func use_item(position: int) -> void:
 	var entity = repository.get_item_entity_by_position(position)
+	
+	if not entity:
+		push_warning("[Backpack Service] 未能获取物品实例，无法使用物品")
+		return
+	
 	entity.use()
 	repository.change_amount_by_position(position, 
 		repository.get_amount_by_position(position) - 1
@@ -26,3 +31,6 @@ func drop_item(position: int) -> void:
 	
 func check_item(position: int) -> void:
 	pass
+
+func swap_items(from: int, to: int) -> void:
+	repository.swap_items(from, to)

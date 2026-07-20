@@ -1,12 +1,15 @@
 class_name BackpackController extends Node
 
 @export var service: BackpackService
+@export var ui: BackpackUI
 @export var player: Player
 @export var info_layer: InfoLayer
 
 func _ready() -> void:
 	if player and player.item_detector:
 		player.item_detector.picked.connect(_on_player_picked)
+		
+	ui.item_swap_requested.connect(_on_item_swap_requested)
 		
 	var item_menu := MenuLayer.backpack_item_menu
 	item_menu.use_item.connect(_on_item_used)
@@ -22,6 +25,9 @@ func _on_player_picked(item: DropItem) -> void:
 	var data := ItemTemplates.get_template_info_by_id(item.item_id)
 	var info = "获得 " + data["name"] + "x" + str(item.amount)
 	info_layer.push_info(info)
+
+func _on_item_swap_requested(from: int, to: int) -> void:
+	service.swap_items(from, to)
 
 func _on_item_used(position: int) -> void:
 	service.use_item(position)

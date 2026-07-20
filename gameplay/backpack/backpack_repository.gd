@@ -4,10 +4,10 @@ class_name BackpackRepository extends Node
 @export var ui: BackpackUI
 
 var inventory_data: Dictionary = {}
+var _index: Dictionary = {} # id → PackedInt32Array
 
 func _ready() -> void:
 	load_inventory()
-	GlobalVariable.backpack_repository = self
 	
 	await ui.ready
 	ui.refresh(inventory_data)
@@ -26,28 +26,29 @@ func load_inventory() -> void:
 		inventory_data = data
 	else:
 		inventory_data = {}
+	_rebuild_index()
 
 func sync() ->void:
 	save_inventory()
+	_rebuild_index()
 	ui.refresh(inventory_data)
-	load_inventory()
+
+func _rebuild_index() -> void:
+	_index.clear()
+	for pos in inventory_data:
+		var data = inventory_data[pos]
+		var id = data["id"]
+		if not _index.has(id):
+			_index[id] = PackedInt32Array()
+		_index[id].append(int(pos))
 
 ## 检查仓库是否有该id的物品
 func has_item(id: String) -> bool:
-	for i in inventory_data:
-		var data = inventory_data[i]
-		if data["id"] == id:
-			return true
-	return false
+	return _index.has(id)
 
 ## 根据物品id获取其位置，返回一个数组
 func get_item_positions_by_id(id: String) -> PackedInt32Array:
-	var arr:PackedInt32Array = []
-	for i in inventory_data:
-		var data = inventory_data[i]
-		if data["id"] == id:
-			arr.push_back(int(i))
-	return arr
+	return _index.get(id, PackedInt32Array())
 	
 ## 修改仓库内特定位置物品的数量
 func change_amount_by_position(pos: int, amount: int) -> bool:
