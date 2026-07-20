@@ -7,8 +7,8 @@ signal check_item(position: int)
 var selected_position: int = -1
 
 func _input(event: InputEvent) -> void:
-	if visible and event is InputEventMouseButton and event.pressed:
-		call_deferred(&"hide")
+	if visible and event is InputEventMouseButton and not event.pressed:
+		hide()
 
 func set_selected_position(pos: int) -> void:
 	selected_position = pos
